@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+
+# allow_override On
+# mod_rewrite is installed
+
+RewriteEngine on
+#RewriteBase /
+RewriteCond %{REQUEST_FILNAME} !-f
+RewriteCond %{REQUEST_FILNAME} !-d
+RewriteRule ^(.*)$ index.php?/$1 [L]
+# controller/action => index.php/controller/action
+
+</IfModule>
