@@ -1,12 +1,11 @@
 <!DOCTYPE HTML>
-<html lang="en-US">
+<html lang="es-ES">
 <head>
 	<meta charset="UTF-8">
 	<title>Salgo - Agregar Usuario</title>
 </head>
 <body>
-	<?php 
-	echo validation_errors();
+	<?php
 	echo form_open('user/addUser');
 	?>
 	<label for="name">Nombre</label>

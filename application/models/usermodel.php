@@ -28,7 +28,7 @@ class Usermodel extends CI_Model
      */
     public function updateUser(array $user)
     {
-        $this->db->update($user);
+        $this->db->update('user', $user);
     }
 
     /**
@@ -37,7 +37,7 @@ class Usermodel extends CI_Model
      */
     public function deleteUser(array $user)
     {
-        $this->db->delete($user);
+        $this->db->delete('user', $user);
     }
 
     /**

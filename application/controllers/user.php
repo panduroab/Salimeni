@@ -8,7 +8,7 @@ class User extends CI_Controller
 
     /**
      * Inicializa el constructor del padre
-     * Inicializa los modelos a utilizar 
+     * Carga el modelo
      */
     public function __construct()
     {
@@ -39,7 +39,7 @@ class User extends CI_Controller
             'email' => $_POST['email'],
             'password' => md5($_POST['password']),
             'type' => $_POST['type']
-        );
+            );
         //Insertar los datos en la base de datos
         $usuario = $this->usermodel->addUser($user);
         //Se obtiene el usuario insertado
