@@ -17,7 +17,10 @@ class Main extends CI_Controller
 
     public function today()
     {
-        echo "HOLA";
+        $this->load->library('Calendar');
+        $calendario = $this->calendar->generate();
+        echo $calendario;
     }
-
+    
+    
 }
