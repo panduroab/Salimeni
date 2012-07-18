@@ -90,7 +90,7 @@ class Placemodel extends CI_Model
      * Obtiene los lugares de un usuario
      * @param array $user 
      */
-    public function getUserPlace($user)
+    public function getPlaceUser($user)
     {
         $result = array();
         $this->db->select('place.place, place.name, place.details, place.adresse,

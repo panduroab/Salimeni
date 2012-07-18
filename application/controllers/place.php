@@ -82,11 +82,11 @@ class Place extends CI_Controller
     /**
      * Obtiene los lugares del user
      */
-    public function getUserPlace()
+    public function getPlaceUser()
     {
         if (isset($_GET['user']) && $_GET['user'] != NULL) {
             $user = $_GET['user'];
-            $lugares = $this->placemodel->getUserPlace($user);
+            $lugares = $this->placemodel->getPlaceUser($user);
             var_dump($lugares);
         }
     }
