@@ -3,8 +3,9 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Main extends CI_Controller
+class Main extends MY_Controller
 {
+
     public function __construct()
     {
         parent::__construct();
@@ -21,6 +22,15 @@ class Main extends CI_Controller
         $calendario = $this->calendar->generate();
         echo $calendario;
     }
-    
-    
+
+    /**
+     * Se elimina la session y se redirije al login 
+     */
+    public function logout()
+    {
+        $this->session->unset_userdata('usr_session');
+        $this->data = NULL;
+        redirect('login');
+    }
+
 }

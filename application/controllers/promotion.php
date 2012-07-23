@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Promotion extends CI_Controller
+class Promotion extends MY_Controller
 {
 
     /**
