@@ -10,7 +10,7 @@ class Login extends CI_Controller
     {
         parent::__construct();
         if ($this->session->userdata('usr_session')) {
-            redirect('main');
+            redirect('admin');
         }
     }
 
@@ -38,7 +38,7 @@ class Login extends CI_Controller
                 //Los datos coincidieron y se crea la session
                 unset($result['password']);
                 $this->session->set_userdata('usr_session', $result);
-                redirect('main');
+                redirect('admin');
             } else {
                 //Los datos NO coincidieron, NO se crea la session
                 $this->load->view('login/index', array('error' => TRUE));
