@@ -68,13 +68,12 @@ class Promotionmodel extends CI_Model
     public function getPromotionPlace($place)
     {
         $result = array();
-        $this->db->select('promotion.promotion, promotion.name, promotion.details,
+        $select = 'promotion.promotion, promotion.name, promotion.details,
             promotion.startAt, promotion.endsAt, promotion.category, 
-            promotion.type, promotion.periodicity, promotion.class');
-        $this->db->from('mapPlacePromotion');
-        $this->db->join('promotion', 'promotion.promotion = mapPlacePromotion.promotion', 'left');
-        $this->db->where('mapPlacePromotion.place', $place);
-        $query = $this->db->get();
+            promotion.type, promotion.periodicity, promotion.class';
+        $join = array('promotion' => 'promotion.promotion = mapPlacePromotion.promotion');
+        $where[] = array('column' => 'mapPlacePromotion.place', 'value' => $place);
+        $query = $this->filter->select($select, 'mapPlacePromotion', $join, $where);
         foreach ($query->result_array() AS $row) {
             $result[] = $row;
         }
@@ -82,55 +81,37 @@ class Promotionmodel extends CI_Model
     }
 
     /**
-     * Retorna las promociones y eventos que estan proximas a ese dia
-     * @param type $time
-     * @param type $category
+     * Retorna las promociones y eventos de acuerdo a los parametros
+     * @param type $promotion Id de la promocion que se desea obtener
+     * @param type $time Fecha en la que inicia la promocion
+     * @param type $category Categoria de la promocion
      * @return type 
      */
-    public function getNowPromotions($time, $category = NULL)
+    public function getMainPromotion($promotion = NULL, $time = NULL, $category = NULL)
     {
         /**
          * Falta agregar el lugar al que pertenece la promocion 
          */
         $result = array();
-        $this->db->select('p.promotion, p.name, p.details, p.createdAt, 
+        $select = 'p.promotion, p.name, p.details, p.createdAt, 
             p.startAt, p.endsAt, p.class, c.category AS categoryId, 
             c.name AS category, s.subcategory AS subcategoryId, 
-            s.name AS subcategory');
-        $this->db->from('promotion p');
-        $this->db->join('category c', 'c.category = p.category', 'left');
-        $this->db->join('subcategory s', 's.category = c.category', 'left');
-        $this->db->where('p.startAt >', $time);
+            s.name AS subcategory, pl.name AS place, pl.details AS placeDetails,
+            pl.latitude, pl.longitude';
+        $join = array('category c' => 'c.category = p.category',
+            'subcategory s' => 's.category = c.category',
+            'mapPlacePromotion mpp' => 'mpp.promotion = p.promotion',
+            'place pl' => 'pl.place = mpp.place');
+        if (!is_null($promotion))
+            $where[] = array('column' => 'p.promotion', 'value' => $promotion);
+        if (!is_null($time))
+            $where[] = array('column' => 'p.startAt >', 'value' => $time);
         if (!is_null($category))
-            $this->db->where('p.category', $category);
-        $query = $this->db->get();
+            $where[] = array('column' => 'p.category', 'value' => $category);
+        $query = $this->filter->select($select, 'promotion p', $join, $where);
         foreach ($query->result_array() as $row) {
             $result[] = $row;
         }
-        return $result;
-    }
-
-    /**
-     *
-     * @param type $promotion 
-     */
-    public function getPromotionDetails($promotion = NULL)
-    {
-        /**
-         * Falta agregar el lugar al que pertenece la promocion 
-         */
-        $result = array();
-        $this->db->select('p.promotion, p.name, p.details, p.createdAt, 
-            p.startAt, p.endsAt, p.class, c.category AS categoryId, 
-            c.name AS category, s.subcategory AS subcategoryId, 
-            s.name AS subcategory');
-        $this->db->from('promotion p');
-        $this->db->join('category c', 'c.category = p.category', 'left');
-        $this->db->join('subcategory s', 's.category = c.category', 'left');
-        $this->db->where('p.promotion', $promotion);
-        $query = $this->db->get();
-        if ($query->num_rows() > 0)
-            $result = $query->row();
         return $result;
     }
 

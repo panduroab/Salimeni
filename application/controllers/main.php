@@ -28,7 +28,7 @@ class main extends CI_Controller
     {
         $category = isset($_GET['category']) && $_GET['category'] != NULL ? $_GET['category'] : NULL;
         $time = date('Y-m-d h:i:s', time());
-        $data['promotion'] = $this->promotionmodel->getNowPromotions($time, $category);
+        $data['promotion'] = $this->promotionmodel->getMainPromotion(NULL, $time, $category);
         $this->load->view('main/now', $data);
     }
 
@@ -38,7 +38,7 @@ class main extends CI_Controller
     public function promotionDetails()
     {
         $promotion = isset($_GET['promotion']) && $_GET['promotion'] != NULL ? $_GET['promotion'] : 0;
-        $data = $this->promotionmodel->getPromotionDetails($promotion);
+        $data['promotion'] = $this->promotionmodel->getMainPromotion($promotion, NULL, NULL);
         $this->load->view('main/promotionDetails', $data);
     }
 

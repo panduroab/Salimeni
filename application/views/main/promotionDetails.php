@@ -6,12 +6,20 @@
     </head>
     <body>
         <ul>
-            <li>
-                <div>
-                    <span><? echo 'Promocion: ' . $promotion ?></span>
-                    <span><? echo 'Nombre: ' . $name ?></span>
-                </div>
-            </li>
+            <?
+            if (isset($promotion))
+                foreach ($promotion as $row) {
+                    ?>
+                    <li>
+                        <div>
+                            <span><? echo 'Promocion: ' . $row['promotion']; ?></span>
+                            <span><? echo 'Nombre: ' . $row['name']; ?></span>
+                            <span><? echo 'Lugar: ' . $row['place']; ?></span>
+                        </div>
+                    </li>
+                    <?
+                }
+            ?>
         </ul>
     </body>
 </html>
