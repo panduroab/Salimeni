@@ -21,7 +21,6 @@
                             var mostrar = '<span> Promocion: '+ item.promotion +'</span>'+
                             '<span>Nombre: '+ item.name +'</span>'+
                             '<span>Lugar: ' + item.place+'</span>'
-
                             places.append(mostrar);
                         });
                     },
