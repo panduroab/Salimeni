@@ -10,15 +10,24 @@ if (!defined('BASEPATH'))
 class main extends CI_Controller
 {
 
+    public $data;
+
     public function __construct()
     {
         parent::__construct();
         $this->load->model('promotionmodel');
+        $this->load->model('categorymodel');
+        $this->load->model('placemodel');
+        $this->load->model('imagemodel');
+        $this->data['category'] = $this->categorymodel->getCategory();
     }
 
     public function index()
     {
+        $this->load->view('common/header', $this->data);
+        $this->load->view('common/menu');
         $this->load->view('main/index');
+        $this->load->view('common/footer');
     }
 
     /**
@@ -27,9 +36,13 @@ class main extends CI_Controller
     public function now()
     {
         $category = isset($_GET['category']) && $_GET['category'] != NULL ? $_GET['category'] : NULL;
-        $time = date('Y-m-d h:i:s', time());
-        $data['promotion'] = $this->promotionmodel->getMainPromotion(NULL, $time, $category);
-        $this->load->view('main/now', $data);
+        $time = date('Y-m-d H:i:s', time());
+        $this->data['promotion'] = $this->promotionmodel->
+                getMainPromo(NULL, $time, $category);
+        $this->load->view('common/header', $this->data);
+        $this->load->view('common/menu');
+        $this->load->view('main/now');
+        $this->load->view('common/footer');
     }
 
     /**
@@ -37,9 +50,30 @@ class main extends CI_Controller
      */
     public function promotionDetails()
     {
+        //Agregar un filtro, si la fecha de expiracion ya paso, ya no mostrar
+        //la promocion.
         $promotion = isset($_GET['promotion']) && $_GET['promotion'] != NULL ? $_GET['promotion'] : 0;
-        $data['promotion'] = $this->promotionmodel->getMainPromotion($promotion, NULL, NULL);
-        $this->load->view('main/promotionDetails', $data);
+        $this->data['promotion'] = $this->promotionmodel->getMainPromo($promotion, NULL, NULL);
+        $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePromotion', 'id' => $promotion, 'column' => 'promotion'));
+        $this->load->view('common/header', $this->data);
+        $this->load->view('common/menu');
+        $this->load->view('main/promotionDetails');
+        $this->load->view('common/footer');
+    }
+
+    /**
+     * Funcion que muestra los detalles de un lugar
+     */
+    public function placeDetails()
+    {
+        $place = isset($_GET['place']) && $_GET['place'] != NULL ? $_GET['place'] : 0;
+        $this->data['place'] = $this->placemodel->getPlace(array('place' => $place), NULL);
+        $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePlace', 'id' => $place, 'column' => 'place'));
+        $this->data['promotions'] = $this->promotionmodel->getPromotionPlace($place);
+        $this->load->view('common/header', $this->data);
+        $this->load->view('common/menu');
+        $this->load->view('main/placeDetails');
+        $this->load->view('common/footer');
     }
 
     /**
@@ -56,6 +90,27 @@ class main extends CI_Controller
     public function explore()
     {
         
+    }
+
+    /**
+
+     * Funcion que muestra todos los lugares o muestra los lugares por
+
+     * categorias
+
+     */
+    public function places()
+    {
+        if (isset($_GET['category']) && !is_null($_GET['category'])) {
+            $category = array('category' => $_GET['category']);
+            $this->data['places'] = $this->placemodel->getPlace(NULL, $category);
+        } else {
+            $this->data['places'] = $this->placemodel->getPlaceImage();
+        }
+        $this->load->view('common/header', $this->data);
+        $this->load->view('common/menu');
+        $this->load->view('main/places');
+        $this->load->view('common/footer');
     }
 
 }
