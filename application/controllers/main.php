@@ -62,11 +62,37 @@ class main extends CI_Controller
     }
 
     /**
+     * Funcion que muestra los detalles de una promocion
+     */
+    public function promocion()
+    {
+        $promotion = $this->uri->segment(3) != 0 ? $this->uri->segment(3) : 0;
+        $this->data['promotion'] = $this->promotionmodel->getMainPromo($promotion, NULL, NULL);
+        $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePromotion', 'id' => $promotion, 'column' => 'promotion'));
+        $this->load->view('common/header', $this->data);
+        $this->load->view('common/menu');
+        $this->load->view('main/promotionDetails');
+        $this->load->view('common/footer');
+    }
+
+    /**
      * Funcion que muestra los detalles de un lugar
      */
     public function placeDetails()
     {
         $place = isset($_GET['place']) && $_GET['place'] != NULL ? $_GET['place'] : 0;
+        $this->data['place'] = $this->placemodel->getPlace(array('place' => $place), NULL);
+        $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePlace', 'id' => $place, 'column' => 'place'));
+        $this->data['promotions'] = $this->promotionmodel->getPromotionPlace($place);
+        $this->load->view('common/header', $this->data);
+        $this->load->view('common/menu');
+        $this->load->view('main/placeDetails');
+        $this->load->view('common/footer');
+    }
+
+    public function lugar()
+    {
+        $place = $this->uri->segment(3) != 0 ? $this->uri->segment(3) : 0;
         $this->data['place'] = $this->placemodel->getPlace(array('place' => $place), NULL);
         $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePlace', 'id' => $place, 'column' => 'place'));
         $this->data['promotions'] = $this->promotionmodel->getPromotionPlace($place);
@@ -105,7 +131,7 @@ class main extends CI_Controller
             $category = array('category' => $_GET['category']);
             $this->data['places'] = $this->placemodel->getPlace(NULL, $category);
         } else {
-            $this->data['places'] = $this->placemodel->getPlaceImage();
+            $this->data['places'] = $this->placemodel->getPlace();
         }
         $this->load->view('common/header', $this->data);
         $this->load->view('common/menu');

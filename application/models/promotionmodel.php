@@ -68,12 +68,13 @@ class Promotionmodel extends CI_Model
     public function getPromotionPlace($place)
     {
         $result = array();
-        $select = 'promotion.promotion, promotion.name, promotion.details,
+        $this->db->select('promotion.promotion, promotion.name, promotion.details,
             promotion.startAt, promotion.endsAt, promotion.category, 
-            promotion.type, promotion.class';
-        $join = array('promotion' => 'promotion.promotion = mapPlacePromotion.promotion');
-        $where[] = array('column' => 'mapPlacePromotion.place', 'value' => $place);
-        $query = $this->filter->select($select, 'mapPlacePromotion', $join, $where);
+            promotion.type, promotion.class, promotion.url');
+        $this->db->from('mapPlacePromotion');
+        $this->db->join('promotion', 'promotion.promotion = mapPlacePromotion.promotion', 'left');
+        $this->db->where('mapPlacePromotion.place', $place);
+        $query = $this->db->get();
         foreach ($query->result_array() AS $row) {
             $result[] = $row;
         }
@@ -87,26 +88,24 @@ class Promotionmodel extends CI_Model
      * @param type $category Categoria de la promocion
      * @return type 
      */
-
     public function getMainPromo($promotion = NULL, $time = NULL, $category = NULL)
     {
-        //Corregir el codigo para que acepte el between en el where
         $result = array();
         $this->db->select('p.promotion, p.name, p.details, p.createdAt, 
             p.startAt, p.endsAt, p.class, c.category AS categoryId, 
             c.name AS category, s.subcategory AS subcategoryId, 
             s.name AS subcategory, pl.place AS placeId, pl.name AS place, 
-            pl.details AS placeDetails, pl.latitude, pl.longitude');
+            pl.details AS placeDetails, pl.latitude, pl.longitude, pl.url');
         $this->db->from('promotion p');
         $this->db->join('category c', 'c.category = p.category', 'left');
         $this->db->join('subcategory s', 's.category = c.category', 'left');
         $this->db->join('mapPlacePromotion mpp', 'mpp.promotion = p.promotion', 'left');
         $this->db->join('place pl', 'pl.place = mpp.place', 'left');
         if (!is_null($promotion))
-            $this->db->where('p.promotion',$promotion);
+            $this->db->where('p.promotion', $promotion);
         if (!is_null($time)) {
             $end = date('Y-m-d H:i:s', time() + 14400);
-            $this->db->where("p.startAt BETWEEN ", "'$time' AND '$end'",FALSE);
+            $this->db->where("p.startAt BETWEEN ", "'$time' AND '$end'", FALSE);
         }
         if (!is_null($category))
             $this->db->where('p.category', $category);
@@ -116,4 +115,5 @@ class Promotionmodel extends CI_Model
         }
         return $result;
     }
+
 }

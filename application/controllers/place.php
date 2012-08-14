@@ -14,6 +14,25 @@ class Place extends MY_Controller
     {
         parent::__construct();
         $this->load->model('placemodel');
+        $this->load->model('categorymodel');
+    }
+
+    /**
+     * Muestra todos los lugares del usuario
+     */
+    public function index()
+    {
+        //Comprueba que tipo de usuario
+        $type = $this->data['type'];
+        if ($type == 'admin') {
+            //Muestra todos los lugares con sus respectivos usuarios
+            $this->data['lugares'] = $this->placemodel->getPlace();
+            var_dump($this->data['lugares']);
+        } else if ($type == 'client') {
+            //Muestra todos los lugares del usuarios
+            $this->data['lugares'] = $this->placemodel->getPlaceUser($this->data['user']);            
+            var_dump($this->data['lugares']);
+        }
     }
 
     /**
@@ -21,8 +40,10 @@ class Place extends MY_Controller
      */
     public function agregarLugar()
     {
-        $data = array('user' => $_GET['user']); //Para pruebas
-        $this->load->view('place/agregarLugar', $data);
+        //Obtiene las categorias
+        $this->data['categorias'] = $this->categorymodel->getCategory();
+        //Le paso a la vista los datos de usuario y las categorias
+        $this->load->view('place/agregarLugar', $this->data);
     }
 
     /**
@@ -30,27 +51,30 @@ class Place extends MY_Controller
      */
     public function addPlace()
     {
-        //Obtiene las categorias
-        $categorias = '';
-        $category = array('restaurant', 'bar', 'antro', 'culture', 'sport');
-        foreach ($category as $value)
-            $categorias .= isset($_POST[$value]) ? $value . ',' : '';
-        //Obtiene las demas categorias
+        //Procesar URL del lugar
+        $url = url_title($_POST['name']) . '.html';
         $place = array(
             'place' => '',
             'name' => $_POST['name'],
             'details' => $_POST['details'],
-            'adresse' => $_POST['adresse'],
             'latitude' => $_POST['latitude'],
             'longitude' => $_POST['longitude'],
-            'category' => $categorias
+            'country' => $_POST['country'],
+            'state' => $_POST['state'],
+            'city' => $_POST['city'],
+            'colony' => $_POST['colony'],
+            'zipCode' => $_POST['zipCode'],
+            'street' => $_POST['street'],
+            'number' => $_POST['number'],
+            'url' => $url,
+            'category' => $_POST['category']
         );
         //Inserta los datos en la base de datos
         $lugar = $this->placemodel->addPlace($place);
         //Se obtiene el lugar insertado
         $result = $this->placemodel->getPlace(array('place' => $lugar));
         //Agregar mapUserPlace
-        $this->addMapUserPlace($_POST['user'], $lugar); //Post para pruebas
+        $this->addMapUserPlace($_POST['user'], $lugar, $this->data['type']); //Post para pruebas
         var_dump($result);
     }
 
@@ -73,9 +97,9 @@ class Place extends MY_Controller
      * @param type $user
      * @param type $place 
      */
-    private function addMapUserPlace($user, $place)
+    private function addMapUserPlace($user, $place, $type)
     {
-        $mapUserPlace = array('user' => $user, 'place' => $place);
+        $mapUserPlace = array('user' => $user, 'place' => $place, 'type' => $type);
         $this->placemodel->addMapUserPlace($mapUserPlace);
     }
 

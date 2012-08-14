@@ -11,16 +11,12 @@ class admin extends MY_Controller
         parent::__construct();
     }
 
+    /**
+     * Muestra el menu principal del Administrador
+     */
     public function index()
     {
         $this->load->view('admin/index');
-    }
-
-    public function today()
-    {
-        $this->load->library('Calendar');
-        $calendario = $this->calendar->generate();
-        echo $calendario;
     }
 
     /**
