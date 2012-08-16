@@ -116,4 +116,15 @@ class Promotionmodel extends CI_Model
         return $result;
     }
 
+    /**
+     * Busca una promocion por medio de una palabra clave
+     * @param type $word
+     * @return array
+     */
+    public function search($word)
+    {
+        $result = array();
+        return $result;
+    }
+
 }

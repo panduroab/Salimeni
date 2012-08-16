@@ -134,4 +134,19 @@ class Placemodel extends CI_Model
         return $result;
     }
 
+    /**
+     * 
+     * @param type $word
+     * @return array
+     */
+    public function search($word)
+    {
+        $result = array();
+        $query = $this->db->get_where('place', array("place" => $word));
+        foreach ($query->result_array() AS $row) {
+            $result[] = $row;
+        }
+        return $result;
+    }
+
 }

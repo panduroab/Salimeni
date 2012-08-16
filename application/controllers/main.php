@@ -90,6 +90,9 @@ class main extends CI_Controller
         $this->load->view('common/footer');
     }
 
+    /**
+     * Funcion que muestra los detalles de un lugar
+     */
     public function lugar()
     {
         $place = $this->uri->segment(3) != 0 ? $this->uri->segment(3) : 0;
@@ -119,11 +122,8 @@ class main extends CI_Controller
     }
 
     /**
-
      * Funcion que muestra todos los lugares o muestra los lugares por
-
      * categorias
-
      */
     public function places()
     {
@@ -137,6 +137,23 @@ class main extends CI_Controller
         $this->load->view('common/menu');
         $this->load->view('main/places');
         $this->load->view('common/footer');
+    }
+
+    /**
+     * Funcion que hace la busqueda de lugares o promociones de acuerdo al filtro
+     */
+    public function search()
+    {
+        $json = '';
+        $word = $_POST['searchword'];
+        //$word = $_GET['searchword'];
+        $search = $this->uri->segment(3) != 0 ? $this->uri->segment(3) : 0;
+        if ($search == 'place') {
+            $json = $this->placemodel->search($word);
+        } else if ($search == 'promotion') {
+            $json = $this->promotionmodel->search($word);
+        }
+        echo json_encode($json);
     }
 
 }
