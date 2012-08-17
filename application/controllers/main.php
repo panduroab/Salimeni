@@ -15,10 +15,6 @@ class main extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('promotionmodel');
-        $this->load->model('categorymodel');
-        $this->load->model('placemodel');
-        $this->load->model('imagemodel');
         $this->data['category'] = $this->categorymodel->getCategory();
     }
 

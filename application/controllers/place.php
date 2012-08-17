@@ -106,13 +106,13 @@ class Place extends MY_Controller
     /**
      * Obtiene los lugares del user
      */
-    public function getPlaceUser()
+    /*public function getPlaceUser()
     {
         if (isset($_GET['user']) && $_GET['user'] != NULL) {
             $user = $_GET['user'];
             $lugares = $this->placemodel->getPlaceUser($user);
             var_dump($lugares);
         }
-    }
+    }*/
 
 }

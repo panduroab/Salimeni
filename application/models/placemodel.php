@@ -48,7 +48,6 @@ class Placemodel extends CI_Model
         if (!is_null($place)) {
             $query = $this->db->get_where('place', $place);
             foreach ($query->result_array() as $row) {
-                //if ($query->num_rows() > 0)
                 $result[] = $row;
             }
             return $result;
@@ -97,9 +96,9 @@ class Placemodel extends CI_Model
 
     /**
      * Obtiene los lugares de un usuario
-     * @param array $user 
+     * @param $user Id del usuario al que pertenecen los lugares
      */
-    public function getPlaceUser($user)
+    public function getPlaceUser($user, $place = NULL)
     {
         $result = array();
         $this->db->select('place.place, place.name, place.details, place.country, 
@@ -109,24 +108,8 @@ class Placemodel extends CI_Model
         $this->db->from('mapUserPlace');
         $this->db->join('place', 'place.place = mapUserPlace.place', 'left');
         $this->db->where('user', $user);
-        $query = $this->db->get();
-        foreach ($query->result_array() AS $row) {
-            $result[] = $row;
-        }
-        return $result;
-    }
-
-    /**
-     * Retorna la lista de los lugares con sus respectivas imagenes
-     */
-    public function getPlaceImage()
-    {
-        $result = array();
-        $this->db->select('place.*, CONCAT( image.path, image.name, image.extension ) AS image');
-        $this->db->from('place');
-        $this->db->join('mapImagePlace', 'mapImagePlace.place = place.place', 'left');
-        $this->db->join('image', 'image.image = mapImagePlace.image', 'left');
-        $this->db->group_by("place.place");
+        if ($place != NULL)
+            $this->db->where('place.place', $place);
         $query = $this->db->get();
         foreach ($query->result_array() AS $row) {
             $result[] = $row;
