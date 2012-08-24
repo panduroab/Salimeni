@@ -20,7 +20,13 @@ class Promotion extends MY_Controller
      */
     public function agregarPromocion()
     {
+        //Obtiene las categorias
+        $this->data['categorias'] = $this->categorymodel->getCategory();
+        //Le paso a la vista los datos de usuario y las categorias
+        $this->load->view('common/header', $this->data);
+        $this->load->view('common/menu');
         $this->load->view('promotion/agregarPromocion');
+        $this->load->view('common/footer');
     }
 
     /**
@@ -28,7 +34,26 @@ class Promotion extends MY_Controller
      */
     public function addPromotion()
     {
-        $this->promotionmodel->addPromotion();
+        //Se crea el array con los datos
+        $promotion = array(
+            'promotion' => '',
+            'name' => $_POST['name'],
+            'details' => $_POST['details'],
+            'createdAt' => $_POST['createdAt'],
+            'startAt' => $_POST['startAt'],
+            'endsAt' => $_POST['endsAt'],
+            'class' => $_POST['class'],
+            'type' => $_POST['type'],
+            'day' => $_POST['day'],
+            'url' => url_title($_POST['name']) . '.html',
+            'category' => $_POST['category'],
+            'subcategory' => $_POST['subcategory']
+        );
+        //Se inserta en la base de datos y se obtiene el id
+        $result = $this->promotionmodel->addPromotion($promotion);
+        //Se inserta la relacion de mapPlacePromotion
+        $this->promotionmodel->addMapPlacePromotion(
+                array('place' => $_POST['place'], 'promotion' => $result));
     }
 
     /**

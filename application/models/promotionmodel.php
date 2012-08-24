@@ -41,6 +41,15 @@ class Promotionmodel extends CI_Model
     }
 
     /**
+     * Inserta la relacion entre un lugar y una promocion
+     * @param type $mapPlacePromotion
+     */
+    public function addMapPlacePromotion($mapPlacePromotion)
+    {
+        $this->db->insert('mapPlacePromotion', $mapPlacePromotion);
+    }
+
+    /**
      * Devuelve la consulta de una o todas las promociones
      * @param array $promotion 
      */

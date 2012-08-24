@@ -1,55 +1,33 @@
-<!DOCTYPE HTML>
-<html lang="es-ES">
-    <head>
-        <meta charset="UTF-8">
-        <title>SALGO.MX - Now</title>
-        <script type="text/javascript" src="<? echo base_url('application/views/assets/js/jquery-1.7.2.min.js') ?>"></script>
-        <script type="text/javascript">
-            var base_url;
-            var places;
-            $(document).ready(function(){
-                base_url = $(location).attr('href');
-                function dataRequest(){
-                    places = $('#places').text('Cargando informacion...');
-                    $.ajax({
-                        url: base_url,
-                        dataType: 'jsonp',
-                        jsonp: 'jsoncallback',
-                        success: function(data, status){
-                            places.empty();
-                            $.each(data, function(i, item){
-                                var mostrar = '<span> Promocion: '+ item.promotion +'</span>'+
-                                    '<span>Nombre: '+ item.name +'</span>'+
-                                    '<span>Lugar: ' + item.place+'</span>'
-                                places.append(mostrar);
-                            });
-                        },
-                        error: function(){
-                            places.text('There was an error loading the data.');
-                        }
-                    });
-                }
-                dataRequest();
-            });
-        </script>
-    </head>
-    <body>
-        <ul>
-            <?
-            foreach ($promotion as $row) {
-                ?>
-                <li>
-                    <div>
-                        <span>
-                            <a href="<? echo base_url('main/promotionDetails.html?promotion=' . $row['promotion']) ?>">
-                                <? echo 'Nombre: ' . $row['name'] . ' Lugar: ' . $row['place']; ?>
-                            </a>
-                        </span>
-                    </div>
-                </li>
-                <?
-            }
+
+<div class="row-fluid">
+    <ul class="no-margin">
+        <?
+        $i = 1;
+        foreach ($promotion as $row) {
+            if ($i == 1)
+                echo '<div class="row-fluid">';
             ?>
-        </ul>
-    </body>
-</html>
+            <li class="span4 option-index rounded list-places">
+                <a href="<?
+        /* echo base_url('main/promotionDetails.html?promotion=' . $row['promotion']) */
+        echo base_url('main/promocion/' . $row['promotion'] . '/' . $row['url'])
+        ?>">
+                    <div class="pull-right hours-details">
+                        <span class="badge badge-success">Inicia: <? echo substr($row['startAt'], 10, -3); ?></span>
+                        <span class="badge badge-important">Termina: <? echo substr($row['endsAt'], 10, -3); ?></span>
+                    </div>
+                    <span class="theplace"><? echo $row['place']; ?></span>
+                    <h3><? echo $row['name']; ?></h3>
+                    <p><? echo $row['details']; ?></p>
+                </a> 
+            </li>
+            <?
+            if ($i == 3) {
+                echo '</div>';
+                $i = 0;
+            }
+            $i++;
+        }
+        ?>
+    </ul>
+</div>  

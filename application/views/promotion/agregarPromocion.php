@@ -1,10 +1,4 @@
-<!DOCTYPE HTML>
-<html lang="es-ES">
-<head>
-	<meta charset="UTF-8">
-	<title>Salgo - Agregar Promocion</title>
-</head>
-<body>
+
 	<?php
 	echo form_open('promotion/addPromotion');
 	?>
@@ -56,5 +50,3 @@
         </select>
 	<div><input type="submit" value="Submit" /></div>
 </form>
-</body>
-</html>

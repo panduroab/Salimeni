@@ -47,30 +47,4 @@ class admin extends MY_Controller
         redirect('main');
     }
 
-    /**
-     * Muestra todos los detalles de un lugar (imagenes, promociones)
-     * Con las opciones de editar todo y agregar imagenes y promociones
-     */
-    public function place()
-    {
-        //Obtiene los parametros de la busqueda
-        $place = isset($_GET['place']) && $_GET['place'] != NULL ? $_GET['place'] : NULL;
-        //Obtiene el place que le pertenece al usuario
-        $this->data['place'] = $this->placemodel->
-                getPlaceUser($this->data['user'], $place);
-        //Obtuvo lugar?
-        if ($this->data['place'] != NULL) {
-            //Muestra las imagenes del lugar señalado
-            $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePlace', 'id' => $place, 'column' => 'place'));
-            $this->data['promotions'] = $this->promotionmodel->getPromotionPlace($place);
-        } else {
-            redirect('admin');
-        }
-        //Se envia la informacion a la vista para que se imprima la lista
-        $this->load->view('common/header', $this->data);
-        $this->load->view('common/menu');
-        $this->load->view('admin/placeDetails');
-        $this->load->view('common/footer');
-    }
-
 }
