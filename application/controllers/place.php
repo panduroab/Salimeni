@@ -3,13 +3,15 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Place extends MY_Controller {
+class Place extends MY_Controller
+{
 
     /**
      * Inicializa el padre  
      * Carga el modelo 
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('placemodel');
         $this->load->model('categorymodel');
@@ -18,7 +20,8 @@ class Place extends MY_Controller {
     /**
      * Muestra todos los lugares del usuario
      */
-    public function index() {
+    public function index()
+    {
         //Comprueba que tipo de usuario
         $type = $this->data['type'];
         if ($type == 'admin') {
@@ -35,7 +38,8 @@ class Place extends MY_Controller {
     /**
      * Muestra la vista de agregar Lugar 
      */
-    public function agregarLugar() {
+    public function agregarLugar()
+    {
         //Obtiene las categorias
         $this->data['categorias'] = $this->categorymodel->getCategory();
         //Le paso a la vista los datos de usuario y las categorias
@@ -48,7 +52,8 @@ class Place extends MY_Controller {
     /**
      * Agrega un lugar a la base de datos 
      */
-    public function addPlace() {
+    public function addPlace()
+    {
         // Se crea el array
         $place = array(
             'place' => '',
@@ -78,12 +83,20 @@ class Place extends MY_Controller {
      * Muestra todos los detalles de un lugar (imagenes, promociones)
      * Con las opciones de editar todo y agregar imagenes y promociones
      */
-    public function getPlace() {
+    public function getPlace()
+    {
         //Obtiene los parametros de la busqueda
         $place = isset($_GET['place']) && $_GET['place'] != NULL ? $_GET['place'] : NULL;
-        //Obtiene el place que le pertenece al usuario
-        $this->data['place'] = $this->placemodel->
-                getPlaceUser($this->data['user'], $place);
+        //Analiza el tipo de usuario
+        if ($this->data['type'] == 'admin') {
+            //Si es administrador lo obtiene sin importar que no sea de el
+            $this->data['place'] = $this->placemodel->
+                    getPlace(array('place' => $place));
+        } else if ($this->data['type'] == 'client') {
+            //Obtiene el place que le pertenece al usuario
+            $this->data['place'] = $this->placemodel->
+                    getPlaceUser($this->data['user'], $place);
+        }
         //Obtuvo lugar?
         if ($this->data['place'] != NULL) {
             //Muestra las imagenes del lugar señalado
@@ -104,7 +117,8 @@ class Place extends MY_Controller {
      * @param type $user
      * @param type $place 
      */
-    private function addMapUserPlace($user, $place, $type) {
+    private function addMapUserPlace($user, $place, $type)
+    {
         $mapUserPlace = array('user' => $user, 'place' => $place, 'type' => $type);
         $this->placemodel->addMapUserPlace($mapUserPlace);
     }
