@@ -77,6 +77,7 @@ if (isset($place))
                                     <div class="span6">
                                         <h2><? echo $row['name']; ?></h2>
                                         <p><? echo $row['details']; ?></p>
+                                        <a href="<? echo base_url('place/update/' . $row['place']); ?>">Editar lugar</a>
                                     </div>
                                 </div>
                             </div>

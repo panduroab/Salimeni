@@ -123,4 +123,60 @@ class Place extends MY_Controller
         $this->placemodel->addMapUserPlace($mapUserPlace);
     }
 
+    /**
+     * Actualiza un lugar de la base de datos
+     */
+    public function update()
+    {
+        //¿Se envio el $_POST con los datos?
+        if (isset($_POST['place'])) {
+            //Obtener los datos del post
+            $place = array(
+                'name' => $_POST['name'],
+                'details' => $_POST['details'],
+                'latitude' => $_POST['latitude'],
+                'longitude' => $_POST['longitude'],
+                'country' => $_POST['country'],
+                'state' => $_POST['state'],
+                'city' => $_POST['city'],
+                'colony' => $_POST['colony'],
+                'zipCode' => $_POST['zipCode'],
+                'street' => $_POST['street'],
+                'number' => $_POST['number'],
+                'url' => url_title($_POST['name']) . '.html',
+                'category' => $_POST['category']
+            );
+            //Se actualiza en la base de datos
+            $this->db->where('place', $_POST['place']);
+            $this->db->update('place', $place);
+            //Se redirige al lugar nuevamente            
+            redirect('place/getPlace.html?place=' . $_POST['place']);
+        } else {
+            //Id del lugar
+            $place = $this->uri->segment(3) != 0 ? $this->uri->segment(3) : 0;
+            //Analiza el tipo de usuario
+            if ($this->data['type'] == 'admin') {
+                //Si es administrador lo obtiene sin importar que no sea de el
+                $this->data['place'] = $this->placemodel->
+                        getPlace(array('place' => $place));
+            } else if ($this->data['type'] == 'client') {
+                //Obtiene el place que le pertenece al usuario
+                $this->data['place'] = $this->placemodel->
+                        getPlaceUser($this->data['user'], $place);
+            }
+            //Se agregan las categorias
+            $this->data['categorias'] = $this->categorymodel->getCategory();
+            if ($this->data['place'] != NULL) {
+                //Si hay informacion se abre el form
+                $this->load->view('common/header', $this->data);
+                $this->load->view('common/adminMenu');
+                $this->load->view('place/update');
+                $this->load->view('common/footer');
+            } else {
+                //No hay informacion
+                redirect('admin');
+            }
+        }
+    }
+
 }
