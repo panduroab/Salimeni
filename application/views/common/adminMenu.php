@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row-fluid">
                 <div class="span12">
-                    <a href="<? echo base_url() ?>" class="brand"><img src="<? echo base_url('application/views/assets/img/salgo-blanco.png'); ?>"/></a>
+                    <a href="<? echo base_url('admin') ?>" class="brand"><img src="<? echo base_url('application/views/assets/img/salgo-blanco.png'); ?>"/></a>
                     <ul class="nav">
                         <li><a href="<? echo base_url('admin/logout.html') ?>">Salir</a></li>
                     </ul>

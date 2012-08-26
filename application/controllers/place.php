@@ -76,17 +76,17 @@ class Place extends MY_Controller
         //Agregar mapUserPlace
         $this->addMapUserPlace($_POST['user'], $lugar, $this->data['type']); //Post para pruebas
         //var_dump($result);
-        redirect('place/getPlace.html?place=' . $lugar);
+        redirect('place/view/' . $lugar);
     }
 
     /**
      * Muestra todos los detalles de un lugar (imagenes, promociones)
      * Con las opciones de editar todo y agregar imagenes y promociones
      */
-    public function getPlace()
+    public function view()
     {
         //Obtiene los parametros de la busqueda
-        $place = isset($_GET['place']) && $_GET['place'] != NULL ? $_GET['place'] : NULL;
+        $place = $this->uri->segment(3) != 0 ? $this->uri->segment(3) : 0;
         //Analiza el tipo de usuario
         if ($this->data['type'] == 'admin') {
             //Si es administrador lo obtiene sin importar que no sea de el
@@ -150,7 +150,7 @@ class Place extends MY_Controller
             $this->db->where('place', $_POST['place']);
             $this->db->update('place', $place);
             //Se redirige al lugar nuevamente            
-            redirect('place/getPlace.html?place=' . $_POST['place']);
+            redirect('place/view/' . $_POST['place']);
         } else {
             //Id del lugar
             $place = $this->uri->segment(3) != 0 ? $this->uri->segment(3) : 0;
