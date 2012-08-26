@@ -1,6 +1,5 @@
-
 <?php
-echo form_open('promotion/addPromotion');
+echo form_open('promotion/add');
 ?>
 <label for="class">Clase</label>
 <select name="class">

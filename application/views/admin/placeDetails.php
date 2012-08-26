@@ -101,18 +101,18 @@ if (isset($place))
                         <ul class="list-promos">
                             <?
                             if (isset($promotions))
-                                foreach ($promotions as $row) {
+                                foreach ($promotions as $value) {
                                     ?>
                                     <li>
                                         <div class="pull-right hours-details">
-                                            <span class="badge badge-success">Inicia: <? echo substr($row['startAt'], 10, -3); ?></span>
-                                            <span class="badge badge-important">Termina: <? echo substr($row['endsAt'], 10, -3); ?></span>
+                                            <span class="badge badge-success">Inicia: <? echo substr($value['startAt'], 10, -3); ?></span>
+                                            <span class="badge badge-important">Termina: <? echo substr($value['endsAt'], 10, -3); ?></span>
                                         </div>
                                         <h3><a href="<?
-                    /* echo base_url('main/promotionDetails.html?promotion=' . $row['promotion']); */
-                    echo base_url('main/promocion/' . $row['promotion'] . '/' . $row['url']);
-                                    ?>"><? echo $row['name'] ?></a></h3><p><?php echo $row['details']; ?></p></li>
+                    echo base_url('main/promocion/' . $value['promotion'] . '/' . $value['url']);
+                                    ?>"><? echo $value['name'] ?></a></h3><p><?php echo $value['details']; ?></p></li>
                                     <? } ?>
+                            <a href="<? echo base_url('promotion/add/' . $row['place'] . '/' . $row['url']); ?>">Agregar nueva Promocion</a>
                         </ul>
                     </div>
                 </div>

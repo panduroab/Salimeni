@@ -26,9 +26,9 @@ class Promotionmodel extends CI_Model
      * Actualiza una promocion en la base de datos
      * @param array $promotion 
      */
-    public function updatePromotion(array $promotion)
+    public function updatePromotion(array $promotion, $id)
     {
-        $this->db->update('promotion', $promotion);
+        $this->db->update('promotion', $promotion, array('promotion' => $id));
     }
 
     /**
@@ -63,10 +63,38 @@ class Promotionmodel extends CI_Model
             return $result;
         } else {
             $query = $this->db->get_where('promotion', $promotion);
-            if ($query->num_rows() > 0)
-                $result = $query->row();
+            foreach ($query->result_array() as $row) {
+                $result[] = $row;
+            }
             return $result;
         }
+    }
+
+    /**
+     * Devuelve la promocion si le pertence a un lugar administrado por el 
+     * usuario
+     * @param type $promotion
+     * @param type $user
+     * @return type
+     */
+    public function getPromotionUser($promotion, $user)
+    {
+        $result = array();
+        $this->db->select('promotion.promotion, promotion.name, promotion.details,
+            promotion.startAt, promotion.endsAt, promotion.category, 
+            promotion.type, promotion.class, promotion.url');
+        $this->db->from('mapPlacePromotion');
+        $this->db->join('promotion', 'promotion.promotion = mapPlacePromotion.promotion', 'left');
+        $this->db->join('place', 'place.place = mapPlacePromotion.place', 'left');
+        $this->db->join('mapUserPlace', 'mapUserPlace.place = place.place', 'left');
+        $this->db->join('user', 'user.user = mapUserPlace.user', 'left');
+        $this->db->where('mapPlacePromotion.promotion', $promotion);
+        $this->db->where('user.user', $user);
+        $query = $this->db->get();
+        foreach ($query->result_array() AS $row) {
+            $result[] = $row;
+        }
+        return $result;
     }
 
     /**
