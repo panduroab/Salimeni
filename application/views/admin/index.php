@@ -12,8 +12,7 @@
             ?>
             <li><a href="<? echo base_url('place/view/' . $value['place']); ?>">
                     <? echo $value['name']; ?></a></li>
-            <?
-        }
-    }
-    ?>
+        <? } ?>
+        <a href="<? echo base_url('place/add'); ?>">Agregar un nuevo Lugar</a>
+    <? } ?>
 </ul>

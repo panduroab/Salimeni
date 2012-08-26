@@ -1,5 +1,5 @@
 <?php
-echo form_open('place/addPlace');
+echo form_open('place/add');
 ?>
 <label for="name">Nombre</label>
 <input type="text" name="name" value="" size="50"/>

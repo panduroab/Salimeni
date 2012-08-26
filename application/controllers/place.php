@@ -36,47 +36,43 @@ class Place extends MY_Controller
     }
 
     /**
-     * Muestra la vista de agregar Lugar 
-     */
-    public function agregarLugar()
-    {
-        //Obtiene las categorias
-        $this->data['categorias'] = $this->categorymodel->getCategory();
-        //Le paso a la vista los datos de usuario y las categorias
-        $this->load->view('common/header', $this->data);
-        $this->load->view('common/adminMenu');
-        $this->load->view('place/agregarLugar');
-        $this->load->view('common/footer');
-    }
-
-    /**
      * Agrega un lugar a la base de datos 
      */
-    public function addPlace()
+    public function add()
     {
-        // Se crea el array
-        $place = array(
-            'place' => '',
-            'name' => $_POST['name'],
-            'details' => $_POST['details'],
-            'latitude' => $_POST['latitude'],
-            'longitude' => $_POST['longitude'],
-            'country' => $_POST['country'],
-            'state' => $_POST['state'],
-            'city' => $_POST['city'],
-            'colony' => $_POST['colony'],
-            'zipCode' => $_POST['zipCode'],
-            'street' => $_POST['street'],
-            'number' => $_POST['number'],
-            'url' => url_title($_POST['name']) . '.html',
-            'category' => $_POST['category']
-        );
-        //Inserta los datos en la base de datos
-        $lugar = $this->placemodel->addPlace($place);
-        //Agregar mapUserPlace
-        $this->addMapUserPlace($_POST['user'], $lugar, $this->data['type']); //Post para pruebas
-        //var_dump($result);
-        redirect('place/view/' . $lugar);
+        if (isset($_POST['user'])) {
+            // Se crea el array
+            $place = array(
+                'place' => '',
+                'name' => $_POST['name'],
+                'details' => $_POST['details'],
+                'latitude' => $_POST['latitude'],
+                'longitude' => $_POST['longitude'],
+                'country' => $_POST['country'],
+                'state' => $_POST['state'],
+                'city' => $_POST['city'],
+                'colony' => $_POST['colony'],
+                'zipCode' => $_POST['zipCode'],
+                'street' => $_POST['street'],
+                'number' => $_POST['number'],
+                'url' => url_title($_POST['name']) . '.html',
+                'category' => $_POST['category']
+            );
+            //Inserta los datos en la base de datos
+            $lugar = $this->placemodel->addPlace($place);
+            //Agregar mapUserPlace
+            $this->addMapUserPlace($_POST['user'], $lugar, $this->data['type']); //Post para pruebas
+            //var_dump($result);
+            redirect('place/view/' . $lugar);
+        } else {
+            //Obtiene las categorias
+            $this->data['categorias'] = $this->categorymodel->getCategory();
+            //Le paso a la vista los datos de usuario y las categorias
+            $this->load->view('common/header', $this->data);
+            $this->load->view('common/adminMenu');
+            $this->load->view('place/agregarLugar');
+            $this->load->view('common/footer');
+        }
     }
 
     /**
