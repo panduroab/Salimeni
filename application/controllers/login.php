@@ -19,7 +19,10 @@ class Login extends CI_Controller
      */
     public function index()
     {
+        $this->load->view('common/header');
+        $this->load->view('common/cleanMenu');
         $this->load->view('login/index');
+        $this->load->view('common/footer');
     }
 
     /**
@@ -41,10 +44,16 @@ class Login extends CI_Controller
                 redirect('admin');
             } else {
                 //Los datos NO coincidieron, NO se crea la session
+                $this->load->view('common/header');
+                $this->load->view('common/cleanMenu');
                 $this->load->view('login/index', array('error' => TRUE));
+                $this->load->view('common/footer');
             }
         } else {
+            $this->load->view('common/header');
+            $this->load->view('common/cleanMenu');
             $this->load->view('login/index', array('error' => TRUE));
+            $this->load->view('common/footer');
         }
     }
 

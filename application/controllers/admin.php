@@ -32,7 +32,7 @@ class admin extends MY_Controller
         }
         //Se envia la informacion a la vista para que se imprima la lista
         $this->load->view('common/header', $this->data);
-        $this->load->view('common/menu');
+        $this->load->view('common/adminMenu');
         $this->load->view('admin/index');
         $this->load->view('common/footer');
     }

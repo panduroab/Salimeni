@@ -30,7 +30,7 @@ class Promotion extends MY_Controller
             //Si es el lugar le pertenece al usuario o es administrador
             $this->data['place'] = $place;
             $this->load->view('common/header', $this->data);
-            $this->load->view('common/menu');
+            $this->load->view('common/adminMenu');
             $this->load->view('promotion/agregarPromocion', $this->data);
             $this->load->view('common/footer');
         } else {

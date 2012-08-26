@@ -44,7 +44,7 @@ class Place extends MY_Controller
         $this->data['categorias'] = $this->categorymodel->getCategory();
         //Le paso a la vista los datos de usuario y las categorias
         $this->load->view('common/header', $this->data);
-        $this->load->view('common/menu');
+        $this->load->view('common/adminMenu');
         $this->load->view('place/agregarLugar');
         $this->load->view('common/footer');
     }
@@ -107,7 +107,7 @@ class Place extends MY_Controller
         }
         //Se envia la informacion a la vista para que se imprima la lista
         $this->load->view('common/header', $this->data);
-        $this->load->view('common/menu');
+        $this->load->view('common/adminMenu');
         $this->load->view('admin/placeDetails');
         $this->load->view('common/footer');
     }
