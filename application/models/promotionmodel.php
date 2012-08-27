@@ -28,7 +28,8 @@ class Promotionmodel extends CI_Model
      */
     public function updatePromotion(array $promotion, $id)
     {
-        $this->db->update('promotion', $promotion, array('promotion' => $id));
+        $this->db->where('promotion', $id);
+        $this->db->update('promotion', $promotion);
     }
 
     /**
@@ -82,7 +83,8 @@ class Promotionmodel extends CI_Model
         $result = array();
         $this->db->select('promotion.promotion, promotion.name, promotion.details,
             promotion.startAt, promotion.endsAt, promotion.category, 
-            promotion.type, promotion.class, promotion.url');
+            promotion.type, promotion.class, promotion.day,
+            promotion.url, place.place');
         $this->db->from('mapPlacePromotion');
         $this->db->join('promotion', 'promotion.promotion = mapPlacePromotion.promotion', 'left');
         $this->db->join('place', 'place.place = mapPlacePromotion.place', 'left');
@@ -90,6 +92,7 @@ class Promotionmodel extends CI_Model
         $this->db->join('user', 'user.user = mapUserPlace.user', 'left');
         $this->db->where('mapPlacePromotion.promotion', $promotion);
         $this->db->where('user.user', $user);
+        $this->db->group_by('promotion');
         $query = $this->db->get();
         foreach ($query->result_array() AS $row) {
             $result[] = $row;

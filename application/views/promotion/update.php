@@ -6,21 +6,22 @@ echo form_open('promotion/update');
     <label for="class">Clase</label>
     <select name="class">
         <? if ($value['class'] == 'event') { ?>
-            <option value="event"<? echo 'selected'; ?>>Evento</option>
-            <option value="promotion"<?
-    } else {
-        echo 'selected';
-    }
-        ?>>Promocion</option>
+            <option value="event" selected>Evento</option>
+            <option value="promotion">Promocion</option>
+        <? } else { ?>
+            <option value="event">Evento</option>
+            <option value="promotion" selected>Promocion</option>
+        <? } ?>
     </select>
+    <input type="hidden" name="promotion" value="<? echo $value['promotion']; ?>" />
     <label for="name">Nombre</label>
     <input type="text" name="name" value="<? echo $value['name'] ?>" size="50"/>
     <label for="details">Detalles</label>
     <textarea name="details" rows="4" cols="20"><? echo $value['details'] ?></textarea>
     <label for="startAt">Inicia el</label>
-    <input type="date" name="startAt" value="<? echo substr($value['startAt'], 0, 9); ?>" />
+    <input type="date" name="startAt" value="<? echo substr($value['startAt'], 0, 10); ?>" />
     <select name="startAtTime">
-        <option value="<? echo substr($value['startAt'], 10, 0); ?>"><? echo substr($value['startAt'], 10, -3); ?></option>
+        <option value="<? echo substr($value['startAt'], 11); ?>"><? echo substr($value['startAt'], 11, -3); ?></option>
         <option value="12:00:00">12:00</option>
         <option value="12:30:00">12:30</option>
         <option value="13:00:00">13:00</option>
@@ -71,9 +72,9 @@ echo form_open('promotion/update');
         <option value="11:30:00">11:30</option>
     </select>
     <label for="endsAt">Termina el</label>
-    <input type="date" name="endsAt" value="<? echo substr($value['endsAt'], 0, 9); ?>" />
+    <input type="date" name="endsAt" value="<? echo substr($value['endsAt'], 0, 10); ?>" />
     <select name="endsAtTime">
-        <option value="<? echo substr($value['endsAt'], 10, 0); ?>"><? echo substr($value['endsAt'], 10, -3); ?></option>
+        <option value="<? echo substr($value['endsAt'], 11); ?>"><? echo substr($value['endsAt'], 11, -3); ?></option>
         <option value="12:00:00">12:00</option>
         <option value="12:30:00">12:30</option>
         <option value="13:00:00">13:00</option>
@@ -136,30 +137,38 @@ echo form_open('promotion/update');
         <? } ?>
     </select>
     <label for="type">Tipo</label>
-    <select name="type"><? if ($value['type'] == 'event') { ?>
-            <option value="only"<? echo 'selected'; ?>>Ocacional</option>
-            <option value="repeat"<?
-    } else {
-        echo 'selected';
-    }
-        ?>>Repetitivo</option>
+    <select name="type">
+        <? if ($value['type'] == 'only') { ?>
+            <option value="only" selected>Ocacional</option>
+            <option value="repeat">Repetitivo</option>
+        <? } else { ?>
+            <option value="only">Ocacional</option>
+            <option value="repeat" selected>Repetitivo</option>
+        <? } ?>
     </select>
     <label for="category">Dias de la semana</label>
-    <input type="checkbox" name="lunes" value="lunes" />
+    <input type="checkbox" name="lunes" value="0" 
+           <? echo strpos($value['day'], '0') !== false ? 'checked' : ''; ?>/>
     <label for="category">Lunes</label>
-    <input type="checkbox" name="martes" value="martes" />
+    <input type="checkbox" name="martes" value="1" 
+           <? echo strpos($value['day'], '1') !== false ? 'checked' : ''; ?>/>
     <label for="category">Martes</label>
-    <input type="checkbox" name="miercoles" value="miercoles" />
+    <input type="checkbox" name="miercoles" value="2" 
+           <? echo strpos($value['day'], '2') !== false ? 'checked' : ''; ?>/>
     <label for="category">Miercoles</label>
-    <input type="checkbox" name="jueves" value="jueves" />
+    <input type="checkbox" name="jueves" value="3" 
+           <? echo strpos($value['day'], '3') !== false ? 'checked' : ''; ?>/>
     <label for="category">Jueves</label>
-    <input type="checkbox" name="viernes" value="viernes" />
+    <input type="checkbox" name="viernes" value="4" 
+           <? echo strpos($value['day'], '4') !== false ? 'checked' : ''; ?>/>
     <label for="category">Viernes</label>
-    <input type="checkbox" name="sabado" value="sabado" />
+    <input type="checkbox" name="sabado" value="5" 
+           <? echo strpos($value['day'], '5') !== false ? 'checked' : ''; ?>/>
     <label for="category">Sabado</label>
-    <input type="checkbox" name="domingo" value="domingo" />
+    <input type="checkbox" name="domingo" value="6" 
+           <? echo strpos($value['day'], '6') !== false ? 'checked' : ''; ?>/>
     <label for="category">Domingo</label>
-    <input type="hidden" name="place" value="<? echo $place; ?>" />
+    <input type="hidden" name="place" value="<? echo $value['place']; ?>" />
 <? } ?>
 <div><input type="submit" value="Submit" /></div>
 </form>

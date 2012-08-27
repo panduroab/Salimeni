@@ -130,19 +130,19 @@ echo form_open('promotion/add');
 </select>
 
 <label for="category">Dias de la semana</label>
-<input type="checkbox" name="lunes" value="lunes" />
+<input type="checkbox" name="lunes" value="0" />
 <label for="category">Lunes</label>
-<input type="checkbox" name="martes" value="martes" />
+<input type="checkbox" name="martes" value="1" />
 <label for="category">Martes</label>
-<input type="checkbox" name="miercoles" value="miercoles" />
+<input type="checkbox" name="miercoles" value="2" />
 <label for="category">Miercoles</label>
-<input type="checkbox" name="jueves" value="jueves" />
+<input type="checkbox" name="jueves" value="3" />
 <label for="category">Jueves</label>
-<input type="checkbox" name="viernes" value="viernes" />
+<input type="checkbox" name="viernes" value="4" />
 <label for="category">Viernes</label>
-<input type="checkbox" name="sabado" value="sabado" />
+<input type="checkbox" name="sabado" value="5" />
 <label for="category">Sabado</label>
-<input type="checkbox" name="domingo" value="domingo" />
+<input type="checkbox" name="domingo" value="6" />
 <label for="category">Domingo</label>
 <input type="hidden" name="place" value="<? echo $place; ?>" />
 <div><input type="submit" value="Submit" /></div>

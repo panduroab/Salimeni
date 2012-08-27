@@ -108,10 +108,13 @@ if (isset($place))
                                             <span class="badge badge-success">Inicia: <? echo substr($value['startAt'], 10, -3); ?></span>
                                             <span class="badge badge-important">Termina: <? echo substr($value['endsAt'], 10, -3); ?></span>
                                         </div>
-                                        <h3><a href="<?
-                    echo base_url('main/promocion/' . $value['promotion'] . '/' . $value['url']);
-                                    ?>"><? echo $value['name'] ?></a></h3><p><?php echo $value['details']; ?></p></li>
-                                    <? } ?>
+                                        <h3>
+                                            <a href="<? echo base_url('main/promocion/' . $value['promotion'] . '/' . $value['url']); ?>"><? echo $value['name'] ?></a>
+                                        </h3>
+                                        <p><?php echo $value['details']; ?></p>
+                                        <p><a href="<? echo base_url('promotion/update/' . $value['promotion'] . '/' . $value['url']); ?>">Editar</a></p>
+                                    </li>
+                                <? } ?>
                             <a href="<? echo base_url('promotion/add/' . $row['place'] . '/' . $row['url']); ?>">Agregar nueva Promocion</a>
                         </ul>
                     </div>
