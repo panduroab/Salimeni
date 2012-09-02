@@ -17,48 +17,69 @@ class User extends MY_Controller
     }
 
     /**
-     * Muestra la vista de agregarUsuario
+     * Agrega usuarios a la base de datos
      */
-    public function agregarUsuario()
+    public function add()
     {
-        $this->load->view('user/agregarUsuario');
-    }
-
-    /**
-     * Recibe los datos y agrega al usario a la base de datos
-     * Muestra al usuario agregado
-     */
-    public function addUser()
-    {
-        //Hay que checar como hacer la validacion y reglas de los campos con CI
-        //Obtengo los datos que me mandaron por post
-        $user = array(
-            'user' => '',
-            'name' => $_POST['name'],
-            'lastName' => $_POST['lastName'],
-            'email' => $_POST['email'],
-            'password' => md5($_POST['password']),
-            'type' => $_POST['type']
-        );
-        //Insertar los datos en la base de datos
-        $usuario = $this->usermodel->addUser($user);
-        //Se obtiene el usuario insertado
-        $result = $this->usermodel->getUser(array('user' => $usuario));
-        var_dump($result);
-    }
-
-    /**
-     * Muestra un usuario 
-     */
-    public function getUser()
-    {
-        if (isset($_GET['user']) && $_GET['user'] != NULL) {
-            $user = array('user' => $_GET['user']);
-            $var = $this->usermodel->getUser($user);
+        if ($this->data['type'] == 'admin') {
+            if (isset($_POST['type'])) {
+                $user = array(
+                    'user' => '',
+                    'name' => $_POST['name'],
+                    'lastName' => $_POST['lastName'],
+                    'email' => $_POST['email'],
+                    'password' => md5($_POST['password']),
+                    'type' => $_POST['type'],
+                    'status' => $_POST['status']
+                );
+                //Insertar los datos en la base de datos
+                $usuario = $this->usermodel->addUser($user);
+                //Redirecciona a la cuenta del usuario
+                redirect('user/account/' . $usuario);
+            } else {
+                $this->load->view('common/header');
+                $this->load->view('common/adminMenu');
+                $this->load->view('user/agregarUsuario');
+                $this->load->view('common/footer');
+            }
         } else {
-            $var = $this->usermodel->getUser();
+            redirect('admin');
         }
-        var_dump($var);
+    }
+
+    /**
+     * 
+     */
+    public function update()
+    {
+        if ($this->data['type'] == 'admin') {
+            if (isset($_POST['user'])) {
+                $userdata = array(
+                    'name' => $_POST['name'],
+                    'lastName' => $_POST['lastName'],
+                    'email' => $_POST['email'],
+                    'type' => $_POST['type'],
+                    'status' => $_POST['status']
+                );
+                //Se actualiza el usuario
+                $this->usermodel->updateUser($_POST['user'], $userdata);
+                //Se redirige
+                redirect('user/account/' . $_POST['user']);
+            } else {
+                $user =
+                        $this->uri->segment(3) != 0 ?
+                        $this->uri->segment(3) : 0;
+                //Obtengo los datos del usuario a editar
+                $this->data['userAccount'] =
+                        $this->usermodel->getUser(array('user' => $user));
+                $this->load->view('common/header', $this->data);
+                $this->load->view('common/adminMenu');
+                $this->load->view('user/update');
+                $this->load->view('common/footer');
+            }
+        } else {
+            redirect('admin');
+        }
     }
 
     /**

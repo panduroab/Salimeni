@@ -26,9 +26,10 @@ class Usermodel extends CI_Model
      * Actualiza un user en la base de datos
      * @param array $user 
      */
-    public function updateUser(array $user)
+    public function updateUser($id, array $data)
     {
-        $this->db->update('user', $user);
+        $this->db->where('user', $id);
+        $this->db->update('user', $data);
     }
 
     /**
