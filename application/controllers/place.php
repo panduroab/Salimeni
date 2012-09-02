@@ -65,6 +65,11 @@ class Place extends MY_Controller
             //var_dump($result);
             redirect('place/view/' . $lugar);
         } else {
+            if ($this->uri->segment(3) != 0 && $this->data['type'] == 'admin') {
+                $this->data['userAdd'] = $this->uri->segment(3);
+            } else {
+                $this->data['userAdd'] = $this->data['user'];
+            }
             //Obtiene las categorias
             $this->data['categorias'] = $this->categorymodel->getCategory();
             //Le paso a la vista los datos de usuario y las categorias

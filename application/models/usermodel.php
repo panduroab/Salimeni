@@ -55,8 +55,9 @@ class Usermodel extends CI_Model
             return $result;
         } else {
             $query = $this->db->get_where('user', $user);
-            if ($query->num_rows() > 0)
-                $result = $query->row();
+            foreach ($query->result_array() as $row) {
+                $result[] = $row;
+            }
             return $result;
         }
     }

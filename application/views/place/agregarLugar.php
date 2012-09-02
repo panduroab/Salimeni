@@ -30,6 +30,6 @@ echo form_open('place/add');
         <? } ?>
     </select>
 <? } ?>
-<input type="hidden" name="user" value="<? echo $user; ?>"/>
+<input type="hidden" name="user" value="<? echo $userAdd; ?>"/>
 <div><input type="submit" value="Submit" /></div>
 </form>

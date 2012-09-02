@@ -39,7 +39,7 @@ class User extends MY_Controller
             'email' => $_POST['email'],
             'password' => md5($_POST['password']),
             'type' => $_POST['type']
-            );
+        );
         //Insertar los datos en la base de datos
         $usuario = $this->usermodel->addUser($user);
         //Se obtiene el usuario insertado
@@ -59,6 +59,32 @@ class User extends MY_Controller
             $var = $this->usermodel->getUser();
         }
         var_dump($var);
+    }
+
+    /**
+     * Devuelve los datos completos del usuario y sus lugares
+     */
+    public function account()
+    {
+        switch ($this->data['type']) {
+            case 'admin'://Admin puede verse a si mismo o a otro user
+                $user = $this->uri->segment(3) != 0 ? $this->uri->segment(3) : $this->data['user'];
+                break;
+            case 'client'://El cliente solo se ve a si mismo
+                $user = $this->data['user'];
+                break;
+        }
+        //Obtiene los datos del usuario
+        $this->data['account'] =
+                $this->usermodel->getUser(array('user' => $user));
+        //Obtiene los lugares del usuario
+        $this->data['places'] =
+                $this->placemodel->getPlaceUser($user);
+        //Envia los datos a la vista
+        $this->load->view('common/header', $this->data);
+        $this->load->view('common/adminMenu');
+        $this->load->view('admin/userAccount');
+        $this->load->view('common/footer');
     }
 
 }

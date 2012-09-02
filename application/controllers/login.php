@@ -41,7 +41,11 @@ class Login extends CI_Controller
                 //Los datos coincidieron y se crea la session
                 unset($result['password']);
                 $this->session->set_userdata('usr_session', $result);
-                redirect('admin');
+                if ($result['type'] == 'admin') {
+                    redirect('admin');
+                } else {
+                    redirect('user/account');
+                }
             } else {
                 //Los datos NO coincidieron, NO se crea la session
                 $this->load->view('common/header');
