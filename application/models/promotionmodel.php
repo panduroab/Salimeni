@@ -84,7 +84,9 @@ class Promotionmodel extends CI_Model
         $this->db->select('promotion.promotion, promotion.name, promotion.details,
             promotion.startAt, promotion.endsAt, promotion.category, 
             promotion.type, promotion.class, promotion.day,
-            promotion.url, place.place');
+            promotion.url, place.place, place.name AS place, 
+            place.details AS placeDetails, place.latitude, 
+            place.longitude, place.url');
         $this->db->from('mapPlacePromotion');
         $this->db->join('promotion', 'promotion.promotion = mapPlacePromotion.promotion', 'left');
         $this->db->join('place', 'place.place = mapPlacePromotion.place', 'left');

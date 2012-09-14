@@ -1,6 +1,6 @@
 <?php
 
-class Image extends CI_Controller
+class Image extends MY_Controller
 {
 
     public function __construct()
@@ -8,27 +8,60 @@ class Image extends CI_Controller
         parent::__construct();
     }
 
-    /**
-     * Cambia el tamaño de una imagen de acuerdo a la ruta y a las medidas
-     */
-    public function thumb()
+    public function add()
     {
-        if ($_GET['src'] != NULL && $_GET['h'] != NULL && $_GET['w'] != NULL
-                && $_GET['name'] != NULL) {
-            $src = $_GET['src'];
-            $height = $_GET['h'];
-            $width = $_GET['w'];
-            $name = $_GET['name'];
-            $config['image_library'] = 'gd2';
-            $config['source_image'] = $src . $name;
-            $config['new_image'] = $src . 'thumbs/' . $name;
-            $config['create_thumb'] = TRUE;
-            $config['maintain_ratio'] = TRUE;
-            $config['width'] = $width;
-            $config['height'] = $height;
-            $this->load->library('image_lib', $config);
-            $this->image_lib->resize();
-            redirect('application/' . $src . 'thumbs/' . $name);
+        if (isset($_POST['tableItem'])) {
+            //Subir la imagen
+            $path = $_POST['tableItem'] == 'place' ?
+                    'application/views/assets/place/img/' :
+                    'application/views/assets/promotion/img/';
+            if (isset($_FILES['photoimg'])) {
+                $data = $this->imagemodel->upload($path, 'photoimg');
+                //Cambiar el tamaño de la imagen y crear miniaturas
+                $this->imagemodel->resizeImagen($data, $_POST['width']);
+                //Guardar los datos en la base de datos
+                $image = array('name' => $data['raw_name'], 'path' => $data['file_path']
+                    , 'extension' => $data['file_ext']);
+                $imageid = $this->imagemodel->insert($image);
+                //Crea la relacion
+                $relation = array('tableItem' => $_POST['tableItem'],
+                    'item' => $_POST['item'],
+                    'image' => $imageid);
+                $this->imagemodel->insertMapImage($relation);
+                redirect($_POST['tableItem'] . '/view/' . $_POST['item']);
+            }
+        } else {
+            //Obtiene los datos de insertcion
+            $tableItem = $this->uri->segment(3);
+            $item = $this->uri->segment(4);
+            //Estan vacios los datos?
+            if ($item != 0 && $tableItem == 'place' ||
+                    $tableItem == 'promotion') {
+                //El item es tuyo?
+                $result = array();
+                switch ($tableItem) {
+                    case 'place':
+                        $result = $this->placemodel->
+                                getPlace(array('place' => $item));
+                        break;
+                    case 'promotion':
+                        $result = $this->promotionmodel->
+                                getPromotion(array('promotion' => $item));
+                        break;
+                }
+                if (count($result) > 0 || $this->data['type'] == 'admin') {
+                    $this->data['tableItem'] = $tableItem;
+                    $this->data['item'] = $item;
+                    $this->load->view('common/header', $this->data);
+                    $this->load->view('common/adminMenu');
+                    $this->load->view('image/add');
+                    $this->load->view('common/footer');
+                } else {
+                    redirect('admin');
+                }
+            } else {
+                redirect('admin');
+            }
         }
     }
 

@@ -146,6 +146,37 @@ class Promotion extends MY_Controller
     }
 
     /**
+     * Muestra los detalles de una promocion
+     */
+    public function view()
+    {
+        //Recibir los datos de la promocion
+        //Comprobar si la promocion le pertenece
+        //Mostrar la promocion
+        $promotion = $this->uri->segment(3) != 0 ? $this->uri->segment(3) : 0;
+        //Analiza el tipo de usuario
+        if ($this->data['type'] == 'admin') {
+            //Si es administrador lo obtiene sin importar que no sea de el
+            $this->data['promotion'] = $this->promotionmodel->
+                    getMainPromo($promotion);
+            $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePromotion', 'id' => $promotion, 'column' => 'promotion'));
+        } else if ($this->data['type'] == 'client') {
+            //Obtiene el promotion que le pertenece al usuario
+            $this->data['promotion'] = $this->promotionmodel->
+                    getPromotionUser($promotion, $this->data['user']);
+            $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePromotion', 'id' => $promotion, 'column' => 'promotion'));
+        }
+        if (!is_null($this->data['promotion'])) {
+            $this->load->view('common/header', $this->data);
+            $this->load->view('common/adminMenu');
+            $this->load->view('admin/promotionDetails');
+            $this->load->view('common/footer');
+        } else {
+            redirect('admin');
+        }
+    }
+
+    /**
      * Muestra una promocion
      */
     public function getPromotion()

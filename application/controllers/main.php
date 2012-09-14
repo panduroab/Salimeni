@@ -18,12 +18,23 @@ class main extends CI_Controller
         $this->data['category'] = $this->categorymodel->getCategory();
     }
 
+    /**
+     * Muestra los componentes principales de la aplicacion
+     */
     public function index()
     {
         $this->load->view('common/header', $this->data);
         $this->load->view('common/menu');
         $this->load->view('main/index');
         $this->load->view('common/footer');
+    }
+
+    /**
+     * Muestra los detalles de la aplicacion
+     */
+    public function about()
+    {
+        $this->load->view('landing/index');
     }
 
     /**

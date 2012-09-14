@@ -47,33 +47,39 @@ if (isset($place))
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="row-fluid">
-                                    <?
-                                    if (isset($images))
-                                        if (count($images) > 1) {
-                                            ?>
-                                            <div id="myCarousel" class="carousel slide span6">
-                                                <!-- Carousel items -->
-                                                <div class="carousel-inner">
-                                                    <?
-                                                    $j = 0;
-                                                    foreach ($images as $imgrow) {
-                                                        ?>
-                                                        <div class="item <? if ($j == 0) echo "active"; ?>"><img src="<? echo base_url($imgrow['image']) ?>"/></div>
-                                                        <?
-                                                        $j++;
-                                                    }
-                                                    ?>
-                                                </div>
-                                                <!-- Carousel nav -->
-                                                <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a> <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-                                            </div>                        
-                                            <script type="text/javascript">$('.carousel').carousel();</script>
-                                        <? }else { ?>
-                                            <? foreach ($images as $imgrow) {
+                                    <div class="span6">
+                                        <a href="<? echo base_url('image/add/place/' . $row['place']); ?>">Agregar nueva imagen</a>
+                                        <?
+                                        if (isset($images))
+                                            if (count($images) > 1) {
                                                 ?>
-                                                <img class="span6" src="<? echo base_url($imgrow['image']) ?>"/>
+                                                <div id="myCarousel" class="carousel slide span6">
+                                                    <!-- Carousel items -->
+                                                    <div class="carousel-inner">
+                                                        <?
+                                                        $j = 0;
+                                                        foreach ($images as $imgrow) {
+                                                            ?>
+                                                            <div class="item <? if ($j == 0) echo "active"; ?>"><img src="<? echo base_url($imgrow['image']) ?>"/></div>
+                                                            <?
+                                                            $j++;
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                    <!-- Carousel nav -->
+                                                    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a> <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                                                </div>                        
+                                                <script type="text/javascript">$('.carousel').carousel();</script>
+                                            <? }else { ?>
+                                                <?
+                                                foreach ($images as $imgrow) {
+                                                    if ($imgrow['image'] != NULL) {
+                                                        ?>
+                                                        <img class="span6" src="<? echo base_url($imgrow['image']) ?>"/>
+                                                    <? } ?>
+                                                <? } ?>
                                             <? } ?>
-                                        <? } ?>
+                                    </div>
                                     <div class="span6">
                                         <h2><? echo $row['name']; ?></h2>
                                         <p><? echo $row['details']; ?></p>
@@ -88,9 +94,9 @@ if (isset($place))
                     <div class="tab-pane" id="mapa">
                         <div id="map_canvas" style=" width:100%;height:200px"></div>
                         <address><?php
-                            echo $row['street'];
-                            echo $row['number'];
-                                    ?><br />
+                                echo $row['street'];
+                                echo $row['number'];
+                                        ?><br />
                             <?php
                             echo $row['colony'] . ', ';
                             echo $row['zipCode'];
@@ -112,7 +118,8 @@ if (isset($place))
                                             <a href="<? echo base_url('main/promocion/' . $value['promotion'] . '/' . $value['url']); ?>"><? echo $value['name'] ?></a>
                                         </h3>
                                         <p><?php echo $value['details']; ?></p>
-                                        <p><a href="<? echo base_url('promotion/update/' . $value['promotion'] . '/' . $value['url']); ?>">Editar</a></p>
+                                        <a href="<? echo base_url('promotion/update/' . $value['promotion'] . '/' . $value['url']); ?>">Editar</a>
+                                            <a href="<? echo base_url('image/add/promotion/' . $value['promotion']); ?>">Agregar imagen a la promoci&oacute;n</a>
                                     </li>
                                 <? } ?>
                             <a href="<? echo base_url('promotion/add/' . $row['place'] . '/' . $row['url']); ?>">Agregar nueva Promocion</a>
