@@ -61,7 +61,7 @@ class main extends CI_Controller
         //la promocion.
         $promotion = isset($_GET['promotion']) && $_GET['promotion'] != NULL ? $_GET['promotion'] : 0;
         $this->data['promotion'] = $this->promotionmodel->getMainPromo($promotion, NULL, NULL);
-        $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePromotion', 'id' => $promotion, 'column' => 'promotion'));
+        $this->data['images'] = $this->imagemodel->getImage('promotion', $promotion);
         $this->load->view('common/header', $this->data);
         $this->load->view('common/menu');
         $this->load->view('main/promotionDetails');
@@ -75,7 +75,7 @@ class main extends CI_Controller
     {
         $promotion = $this->uri->segment(3) != 0 ? $this->uri->segment(3) : 0;
         $this->data['promotion'] = $this->promotionmodel->getMainPromo($promotion, NULL, NULL);
-        $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePromotion', 'id' => $promotion, 'column' => 'promotion'));
+        $this->data['images'] = $this->imagemodel->getImage('promotion', $promotion);
         $this->load->view('common/header', $this->data);
         $this->load->view('common/menu');
         $this->load->view('main/promotionDetails');
@@ -89,7 +89,7 @@ class main extends CI_Controller
     {
         $place = isset($_GET['place']) && $_GET['place'] != NULL ? $_GET['place'] : 0;
         $this->data['place'] = $this->placemodel->getPlace(array('place' => $place), NULL);
-        $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePlace', 'id' => $place, 'column' => 'place'));
+        $this->data['images'] = $this->imagemodel->getImage('place', $place);
         $this->data['promotions'] = $this->promotionmodel->getPromotionPlace($place);
         $this->load->view('common/header', $this->data);
         $this->load->view('common/menu');
@@ -104,7 +104,7 @@ class main extends CI_Controller
     {
         $place = $this->uri->segment(3) != 0 ? $this->uri->segment(3) : 0;
         $this->data['place'] = $this->placemodel->getPlace(array('place' => $place), NULL);
-        $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePlace', 'id' => $place, 'column' => 'place'));
+        $this->data['images'] = $this->imagemodel->getImage('place', $place);
         $this->data['promotions'] = $this->promotionmodel->getPromotionPlace($place);
         $this->load->view('common/header', $this->data);
         $this->load->view('common/menu');

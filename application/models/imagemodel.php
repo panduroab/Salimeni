@@ -58,18 +58,18 @@ class Imagemodel extends CI_Model
     }
 
     /**
-     * Obtiene las imagenes de mapImagePlace o mapImagePromotion dependiendo del
-     * array
-     * @param type $var array('table'=>'', 'id'=>'', 'column'=>'')
+     * Devuelve imagenes segun el filtro
+     * @param array $image
+     * @return type
      */
-    public function getImage(array $var)
+    public function getImage($table, $id)
     {
         $result = array();
-        $this->db->select('CONCAT( i.path,i.name,i.extension ) AS image');
-        $this->db->from($var['column'] . ' p');
-        $this->db->join($var['table'] . ' mip', 'mip.' . $var['column'] . ' = p.' . $var['column'], 'left');
-        $this->db->join('image i', 'i.image = mip.image', 'left');
-        $this->db->where('p.' . $var['column'], $var['id']);
+        $this->db->select('CONCAT( path, name, extension ) AS image');
+        $this->db->from('mapImage');
+        $this->db->join('image', 'image.image = mapImage.image', 'left');
+        $this->db->where('mapImage.item', $id);
+        $this->db->where('mapImage.tableItem', $table);
         $query = $this->db->get();
         foreach ($query->result_array() as $row) {
             $result[] = $row;
@@ -131,7 +131,7 @@ class Imagemodel extends CI_Model
         imagedestroy($src);
         imagedestroy($tmp);
         imagedestroy($tmp1);
-        return $filename;
+        return $image_name;
     }
 
 }

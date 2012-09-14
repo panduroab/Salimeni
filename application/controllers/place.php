@@ -101,7 +101,7 @@ class Place extends MY_Controller
         //Obtuvo lugar?
         if ($this->data['place'] != NULL) {
             //Muestra las imagenes del lugar señalado
-            $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePlace', 'id' => $place, 'column' => 'place'));
+            $this->data['images'] = $this->imagemodel->getImage('place', $place);
             $this->data['promotions'] = $this->promotionmodel->getPromotionPlace($place);
         } else {
             redirect('admin');

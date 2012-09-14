@@ -115,7 +115,7 @@ if (isset($place))
                                             <span class="badge badge-important">Termina: <? echo substr($value['endsAt'], 10, -3); ?></span>
                                         </div>
                                         <h3>
-                                            <a href="<? echo base_url('main/promocion/' . $value['promotion'] . '/' . $value['url']); ?>"><? echo $value['name'] ?></a>
+                                            <a href="<? echo base_url('promotion/view/' . $value['promotion'] . '/' . $value['url']); ?>"><? echo $value['name'] ?></a>
                                         </h3>
                                         <p><?php echo $value['details']; ?></p>
                                         <a href="<? echo base_url('promotion/update/' . $value['promotion'] . '/' . $value['url']); ?>">Editar</a>

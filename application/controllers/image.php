@@ -18,9 +18,9 @@ class Image extends MY_Controller
             if (isset($_FILES['photoimg'])) {
                 $data = $this->imagemodel->upload($path, 'photoimg');
                 //Cambiar el tamaño de la imagen y crear miniaturas
-                $this->imagemodel->resizeImagen($data, $_POST['width']);
+                $image_name = $this->imagemodel->resizeImagen($data, $_POST['width']);
                 //Guardar los datos en la base de datos
-                $image = array('name' => $data['raw_name'], 'path' => $data['file_path']
+                $image = array('name' => $image_name, 'path' => $path
                     , 'extension' => $data['file_ext']);
                 $imageid = $this->imagemodel->insert($image);
                 //Crea la relacion

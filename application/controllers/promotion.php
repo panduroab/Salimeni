@@ -159,12 +159,12 @@ class Promotion extends MY_Controller
             //Si es administrador lo obtiene sin importar que no sea de el
             $this->data['promotion'] = $this->promotionmodel->
                     getMainPromo($promotion);
-            $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePromotion', 'id' => $promotion, 'column' => 'promotion'));
+            $this->data['images'] = $this->imagemodel->getImage('promotion', $promotion);
         } else if ($this->data['type'] == 'client') {
             //Obtiene el promotion que le pertenece al usuario
             $this->data['promotion'] = $this->promotionmodel->
                     getPromotionUser($promotion, $this->data['user']);
-            $this->data['images'] = $this->imagemodel->getImage(array('table' => 'mapImagePromotion', 'id' => $promotion, 'column' => 'promotion'));
+            $this->data['images'] = $this->imagemodel->getImage('promotion', $promotion);
         }
         if (!is_null($this->data['promotion'])) {
             $this->load->view('common/header', $this->data);
