@@ -1,4 +1,3 @@
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript">
     var latitude;
@@ -22,6 +21,18 @@
                 title:"Lugar"
             });
         }
+        promotion = $('#promotion').val();
+        base_url = $('#url').val();
+        $('#BDeletePromotion').click(function(){
+            $.ajax({
+                type: 'POST',
+                url: base_url+'promotion/delete',
+                data: {promotion: promotion},
+                success: $('#deletePromotion').modal('hide')
+            }).done(function(){
+                window.location.replace(base_url+'admin/')
+            })
+        });
     });
 </script>
 <?
@@ -31,6 +42,8 @@ foreach ($promotion as $row) {
     ?>
     <div class="row-fluid">
         <div class="span12 option-index details-place rounded">
+            <input type="hidden" name="url" id="url" value="<? echo base_url() ?>"/>
+            <input type="hidden" name="promotion" id="promotion" value="<? echo $row['promotion'] ?>"/>
             <input type="hidden" name="longitude" id="lon" value="<? echo $row['longitude'] ?>" />
             <input type="hidden" name="latitude" id="lat" value="<? echo $row['latitude'] ?>" />
             <div class="row-fluid">
@@ -74,6 +87,7 @@ foreach ($promotion as $row) {
                             <p>
                                 <a href="<? echo base_url('promotion/update/' . $row['promotion']); ?>">Editar</a>
                                 <a href="<? echo base_url('image/add/promotion/' . $row['promotion']) ?>">Agregar imagen</a>
+                                <button type="button" data-toggle="modal" data-target="#deletePromotion">Eliminar promocion</button>
                             </p>
                         </div>
                     </div>
@@ -86,3 +100,18 @@ foreach ($promotion as $row) {
     $w++;
 }
 ?>
+<div class="modal" id="deletePromotion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" >
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">¡Cuidado!</h3>
+    </div>
+    <div class="modal-body">¿Esta seguro que desea eliminar esta promoci&oacute;n?</div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        <button id="BDeletePromotion" class="btn btn-danger">Eliminar</button>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#deletePromotion").modal()
+    $('#deletePromotion').modal('hide')
+</script>

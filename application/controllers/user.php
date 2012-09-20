@@ -83,6 +83,19 @@ class User extends MY_Controller
     }
 
     /**
+     * Elimina un usuario de la base de datos
+     */
+    public function delete()
+    {
+        if (isset($_POST['user']) && $this->data['type'] == 'admin') {
+            //Obtener todos los lugares del usuario
+            //Obtener todas las promociones del susuario
+            //Eliminar todo
+            $this->db->delete('user', array('user' => $_POST['user']));
+        }
+    }
+
+    /**
      * Devuelve los datos completos del usuario y sus lugares
      */
     public function account()

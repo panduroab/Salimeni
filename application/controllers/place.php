@@ -15,6 +15,7 @@ class Place extends MY_Controller
         parent::__construct();
         $this->load->model('placemodel');
         $this->load->model('categorymodel');
+        $this->load->model('promotionmodel');
     }
 
     /**
@@ -177,6 +178,36 @@ class Place extends MY_Controller
                 //No hay informacion
                 redirect('admin');
             }
+        }
+    }
+
+    /**
+     * Elimina un lugar de la base de datos junto con sus dependencias
+     * @return boolean
+     */
+    public function delete()
+    {
+        if (isset($_POST['place'])) {
+            $place = $_POST['place'];
+            if ($this->data['type'] == 'client') {
+                $this->data['place'] = $this->placemodel->
+                        getPlaceUser($this->data['user'], $place);
+            }
+            if ($this->data['type'] == 'admin' || $this->data['place'] != NULL) {
+                $promo = $this->promotionmodel->getPromotionPlace($place, 'id');
+                $this->db->delete('mapImage', array('tableItem' => 'place', 'item' => $place));
+                $this->db->delete('mapPlacePromotion', array('place' => $place));
+                foreach ($promo as $value) {
+                    foreach ($value as $row) {
+                        $this->db->delete('promotion', array('promotion' => $row));
+                    }
+                }
+                $this->db->delete('place', array('place' => $place));
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 

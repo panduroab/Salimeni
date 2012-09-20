@@ -176,6 +176,24 @@ class Promotion extends MY_Controller
         }
     }
 
+    public function delete()
+    {
+        if (isset($_POST['promotion'])) {
+            $promotion = $_POST['promotion'];
+            if ($this->data['type'] == 'client') {
+                $this->data['promotion'] = $this->promotionmodel->
+                        getPromotionUser($promotion, $this->data['user']);
+            }
+            if ($this->data['type'] == 'admin' || $this->data['promotion'] != NULL) {
+                $this->db->delete('promotion', array('promotion' => $promotion));
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Muestra una promocion
      */

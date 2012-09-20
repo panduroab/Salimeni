@@ -1,8 +1,10 @@
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript">
     var latitude;
     var longitude;
+    var place;
+    var base_url;
+    var l;
     $(document).ready(function(){
         //Se obtienen los datos del lugar
         latitude = $('#lat').val();
@@ -22,6 +24,18 @@
                 title:"Lugar"
             });
         }
+        place = $('#place').val();
+        base_url = $('#url').val();
+        $('#BDeletePlace').click(function(){
+            $.ajax({
+                type: 'POST',
+                url: base_url+'place/delete',
+                data: {place: place},
+                success: $('#deletePlace').modal('hide')
+            }).done(function(){
+                window.location.replace(base_url+'admin/')
+            })
+        });
     });
 </script>
 <?
@@ -42,6 +56,8 @@ if (isset($place))
                 <div class="tab-content">
                     <!-- iniciaaa info-->
                     <div class="tab-pane active" id="info">
+                        <input type="hidden" name="url" id="url" value="<?echo base_url()?>"/>
+                        <input type="hidden" name="place" id="place" value="<?echo $row['place']?>"/>
                         <input type="hidden" name="longitude" id="lon" value="<? echo $row['longitude'] ?>" />
                         <input type="hidden" name="latitude" id="lat" value="<? echo $row['latitude'] ?>" />
                         <div class="row-fluid">
@@ -84,6 +100,7 @@ if (isset($place))
                                         <h2><? echo $row['name']; ?></h2>
                                         <p><? echo $row['details']; ?></p>
                                         <a href="<? echo base_url('place/update/' . $row['place']); ?>">Editar lugar</a>
+                                        <button type="button" data-toggle="modal" data-target="#deletePlace">Eliminar lugar</button>
                                     </div>
                                 </div>
                             </div>
@@ -119,7 +136,7 @@ if (isset($place))
                                         </h3>
                                         <p><?php echo $value['details']; ?></p>
                                         <a href="<? echo base_url('promotion/update/' . $value['promotion'] . '/' . $value['url']); ?>">Editar</a>
-                                            <a href="<? echo base_url('image/add/promotion/' . $value['promotion']); ?>">Agregar imagen a la promoci&oacute;n</a>
+                                        <a href="<? echo base_url('image/add/promotion/' . $value['promotion']); ?>">Agregar imagen a la promoci&oacute;n</a>
                                     </li>
                                 <? } ?>
                             <a href="<? echo base_url('promotion/add/' . $row['place'] . '/' . $row['url']); ?>">Agregar nueva Promocion</a>
@@ -132,9 +149,22 @@ if (isset($place))
         <?
     }
 ?>
+<div class="modal" id="deletePlace" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" >
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Advertencia</h3>
+    </div>
+    <div class="modal-body">¿Esta seguro que desea eliminar este Lugar? Se eliminaran todos los datos relacionados a este Lugar, tales como Promociones e Imagenes.</div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        <button id="BDeletePlace" class="btn btn-danger">Eliminar</button>
+    </div>
+</div>
 <script type="text/javascript">
     $('#myTab a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
     })
+    $("#deletePlace").modal()
+    $('#deletePlace').modal('hide')
 </script>

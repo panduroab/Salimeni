@@ -32,8 +32,9 @@ class Placemodel extends CI_Model
      * Elimina un place en la base de datos
      * @param array $place 
      */
-    public function deletePlace(array $place)
+    public function delete(array $place)
     {
+        $this->db->delete('mapUserPlace', $place);
         $this->db->delete('place', $place);
     }
 

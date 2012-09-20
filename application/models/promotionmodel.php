@@ -36,7 +36,7 @@ class Promotionmodel extends CI_Model
      * Elimina una promocion en la base de datos
      * @param array $promotion 
      */
-    public function deletePromotion(array $promotion)
+    public function delete(array $promotion)
     {
         $this->db->delete('promotion', $promotion);
     }
@@ -84,7 +84,7 @@ class Promotionmodel extends CI_Model
         $this->db->select('promotion.promotion, promotion.name, promotion.details,
             promotion.startAt, promotion.endsAt, promotion.category, 
             promotion.type, promotion.class, promotion.day,
-            promotion.url, place.place, place.name AS place, 
+            promotion.url, place.place AS placeId, place.name AS place, 
             place.details AS placeDetails, place.latitude, 
             place.longitude, place.url');
         $this->db->from('mapPlacePromotion');
@@ -107,12 +107,16 @@ class Promotionmodel extends CI_Model
      * @param type $place
      * @return type 
      */
-    public function getPromotionPlace($place)
+    public function getPromotionPlace($place, $id = NULL)
     {
         $result = array();
-        $this->db->select('promotion.promotion, promotion.name, promotion.details,
+        if ($id != NULL) {
+            $this->db->select('promotion.promotion');
+        } else {
+            $this->db->select('promotion.promotion, promotion.name, promotion.details,
             promotion.startAt, promotion.endsAt, promotion.category, 
             promotion.type, promotion.class, promotion.url');
+        }
         $this->db->from('mapPlacePromotion');
         $this->db->join('promotion', 'promotion.promotion = mapPlacePromotion.promotion', 'left');
         $this->db->where('mapPlacePromotion.place', $place);
