@@ -188,8 +188,10 @@ class Place extends MY_Controller
     public function delete()
     {
         if (isset($_POST['place'])) {
+            //Comprueba si el lugar le pertenece al usuario
             $place = $_POST['place'];
             if ($this->data['type'] == 'client') {
+                //Obtiene el place que le pertenece al usuario
                 $this->data['place'] = $this->placemodel->
                         getPlaceUser($this->data['user'], $place);
             }
@@ -197,6 +199,7 @@ class Place extends MY_Controller
                 $promo = $this->promotionmodel->getPromotionPlace($place, 'id');
                 $this->db->delete('mapImage', array('tableItem' => 'place', 'item' => $place));
                 $this->db->delete('mapPlacePromotion', array('place' => $place));
+                //var_dump($promo);
                 foreach ($promo as $value) {
                     foreach ($value as $row) {
                         $this->db->delete('promotion', array('promotion' => $row));

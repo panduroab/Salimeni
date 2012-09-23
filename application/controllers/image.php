@@ -21,14 +21,14 @@ class Image extends MY_Controller
                 $image_name = $this->imagemodel->resizeImagen($data, $_POST['width']);
                 //Guardar los datos en la base de datos
                 $image = array('name' => $image_name, 'path' => $path
-                    , 'extension' => $data['file_ext']);
+                    , 'extension' => $data['file_ext'], 'filePath' => $data['file_path']);
                 $imageid = $this->imagemodel->insert($image);
                 //Crea la relacion
                 $relation = array('tableItem' => $_POST['tableItem'],
                     'item' => $_POST['item'],
                     'image' => $imageid);
                 $this->imagemodel->insertMapImage($relation);
-                redirect($_POST['tableItem'] . '/view/' . $_POST['item']);
+                redirect('image/add/' . $_POST['tableItem'] . '/' . $_POST['item']);
             }
         } else {
             //Obtiene los datos de insertcion
@@ -43,10 +43,14 @@ class Image extends MY_Controller
                     case 'place':
                         $result = $this->placemodel->
                                 getPlace(array('place' => $item));
+                        $this->data['images'] =
+                                $this->imagemodel->getImage('place', $item, TRUE);
                         break;
                     case 'promotion':
                         $result = $this->promotionmodel->
                                 getPromotion(array('promotion' => $item));
+                        $this->data['images'] =
+                                $this->imagemodel->getImage('promotion', $item, TRUE);
                         break;
                 }
                 if (count($result) > 0 || $this->data['type'] == 'admin') {
@@ -62,6 +66,24 @@ class Image extends MY_Controller
             } else {
                 redirect('admin');
             }
+        }
+    }
+
+    /**
+     * Elimina una image de la base de datos
+     * y renombra la imagen en el servidor
+     */
+    public function delete()
+    {
+        if (isset($_POST['image'])) {
+            $image = $_POST['image'];
+            $this->db->delete('mapImage', array('image' => $image));
+            $this->db->delete('image', array('image' => $image));
+            $del = $this->imagemodel->get($image);
+            $path = $del[0]['filePath'];
+            $name = $del[0]['name'];
+            $extension = $del[0]['extension'];
+            $this->imagemodel->deleteFile($path, $name, $extension);
         }
     }
 

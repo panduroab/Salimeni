@@ -64,7 +64,7 @@ if (isset($place))
                             <div class="span12">
                                 <div class="row-fluid">
                                     <div class="span6">
-                                        <a href="<? echo base_url('image/add/place/' . $row['place']); ?>">Agregar nueva imagen</a>
+                                        <a href="<? echo base_url('image/add/place/' . $row['place']); ?>">Administrar Imagenes</a>
                                         <?
                                         if (isset($images))
                                             if (count($images) > 1) {

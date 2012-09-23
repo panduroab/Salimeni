@@ -62,15 +62,35 @@ class Imagemodel extends CI_Model
      * @param array $image
      * @return type
      */
-    public function getImage($table, $id)
+    public function getImage($table, $id, $thumbs = NULL)
     {
         $result = array();
-        $this->db->select('CONCAT( path, name, extension ) AS image');
+        if ($thumbs == TRUE) {
+            $this->db->select('CONCAT( path, name, "_thumb", extension ) AS image, image.image AS id', false);
+        } else {
+            $this->db->select('CONCAT( path, name, extension ) AS image, image.image AS id');
+        }
         $this->db->from('mapImage');
         $this->db->join('image', 'image.image = mapImage.image', 'left');
         $this->db->where('mapImage.item', $id);
         $this->db->where('mapImage.tableItem', $table);
+        $this->db->order_by("image", "desc");
         $query = $this->db->get();
+        foreach ($query->result_array() as $row) {
+            $result[] = $row;
+        }
+        return $result;
+    }
+
+    /**
+     * Devuelve una imagen segun su id
+     * @param type $image
+     * @return type
+     */
+    public function get($image)
+    {
+        $result = array();
+        $query = $this->db->get_where('image', array('image' => $image));
         foreach ($query->result_array() as $row) {
             $result[] = $row;
         }
@@ -117,7 +137,7 @@ class Imagemodel extends CI_Model
         $height = $data['image_height'];
         $newheight = ($height / $width) * $newwidth;
         $tmp = imagecreatetruecolor($newwidth, $newheight);
-        $newwidth1 = 32;
+        $newwidth1 = 180;
         $newheight1 = ($height / $width) * $newwidth1;
         $tmp1 = imagecreatetruecolor($newwidth1, $newheight1);
         imagecopyresampled($tmp, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
@@ -132,6 +152,18 @@ class Imagemodel extends CI_Model
         imagedestroy($tmp);
         imagedestroy($tmp1);
         return $image_name;
+    }
+
+    /**
+     * Elimina las imagenes del servidor
+     * @param type $path
+     * @param type $name
+     * @param type $extension
+     */
+    public function deleteFile($path, $name, $extension)
+    {
+        rename($path . $name . $extension, $path . 'del_' . $name . $extension);
+        rename($path . $name . '_thumb' . $extension, $path . 'del_' . $name . '_thumb' . $extension);
     }
 
 }
