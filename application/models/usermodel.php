@@ -48,6 +48,7 @@ class Usermodel extends CI_Model
      */
     public function getUser(array $user = NULL)
     {
+        $result = array();
         if (is_null($user)) {
             $query = $this->db->get('user');
             foreach ($query->result_array() as $row) {
@@ -61,6 +62,35 @@ class Usermodel extends CI_Model
             }
             return $result;
         }
+    }
+
+    /**
+     * Envia un email al usuario registrado
+     * @param String $to
+     * @param String $paterno
+     * @param String $clave
+     */
+    public function sendEmail($to, $paterno, $clave)
+    {
+        $config['protocol'] = "smtp";
+        $config['smtp_host'] = "smtp.emailsrvr.com";
+        $config['smtp_user'] = "no-reply@elchaneke.com";
+        $config['smtp_pass'] = "hellbert";
+        $config['smtp_port'] = "25";
+        $this->email->initialize($config);
+        $this->email->from('no-reply@elchaneke.com', 'Soporte DrExp');
+        $this->email->to($to);
+        $url = base_url('validar/');
+        $content = "Dr " . $paterno . ", " . "\r\n" . "\r\n" .
+                "Le damos la bienvenida a DrExp, para validar su cuenta y comenzar 
+                 a utilizar la aplicación solo siga este enlace 
+                 " . $url . "?m=" . $to . "&c=" . $clave . " si no puede dar clic en el copielo y peguelo en la barra de navegación."
+                . "\r\n" . "\r\n" .
+                "Atte: " .
+                "El equipo de soporte de DrExp";
+        $this->email->subject('Bienvenido a DrExp');
+        $this->email->message($content);
+        $this->email->send();
     }
 
 }

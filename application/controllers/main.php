@@ -34,7 +34,10 @@ class main extends CI_Controller
      */
     public function about()
     {
-        $this->load->view('landing/index');
+        if (isset($_GET['existe']))
+            $this->load->view('landing/index', array('existe' => TRUE));
+        else
+            $this->load->view('landing/index');
     }
 
     /**
@@ -161,6 +164,29 @@ class main extends CI_Controller
             $json = $this->promotionmodel->search($word);
         }
         echo json_encode($json);
+    }
+
+    /**
+     * Agrega un usuario a la base de datos
+     */
+    public function subscription()
+    {
+        if (isset($_POST['email'])) {
+            $user = array('name' => $_POST['name'],
+                'lastName' => $_POST['lastName'],
+                'email' => $_POST['email'],
+                'type' => 'user',
+                'status' => 'active');
+            $toAdd = $this->usermodel->getUser(array('email' => $user['email']));
+            if (count($toAdd) > 0) {
+                redirect('main/about.html?existe=true');
+            } else {
+                $this->usermodel->addUser($user);
+                $this->load->view('landing/registro');
+            }
+        } else {
+            redirect('main/about');
+        }
     }
 
 }
